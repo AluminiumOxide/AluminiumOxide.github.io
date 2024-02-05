@@ -1,5 +1,6 @@
 - OpenMMLab
-  - [mmdetection2.6 win10 without cuda install](/wp_data/2020-12-09-mmdetection2-6-win10-without-cuda-install/index)
+  - [mmdetection2.6 win10 without cuda install](/wp_data/2020-12-09-mmdetection2-6-win10-without-cuda-install/)
+  - [mmdetection2.6](/2020-12-09-mmdetection2-6-win10-without-cuda-install/)
   - [win10_build_mmcv-full_from_source](/wp_data/2021-05-26-win10_build_mmcv-full_from_source/)
   - [mmclassification_getting_started](/wp_data/2021-05-29-mmclassification_getting_started/)
   - [mmclassification_installation](/wp_data/2021-05-29-mmclassification_installation/)
