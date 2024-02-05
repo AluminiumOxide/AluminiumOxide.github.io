@@ -89,7 +89,7 @@
 
 ### 杂项笔记
 
-[2020-12-14-china-pip-image](/wp_data/2020-12-14-china-pip-image/)
+[2020-12-14-china-pip-image](/wp_data/2020-12-14-china-pip-image/page)
 
 [2021-01-24-anaconda_prompt_shortcut_key](/wp_data/2021-01-24-anaconda_prompt_/)
 
