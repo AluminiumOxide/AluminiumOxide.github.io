@@ -56,7 +56,10 @@
   - [stargan_3_debug](/wp_data/2022-08-04-stargan_3_debug/page)
 
 
-- [others](/wp_data/page_list?id=杂项笔记)
+- others
+
+    - [old_web_note](/wp_data/page_list?id=杂项笔记)
+    - [430_note](/markdown_430/page_list?id=杂项笔记)
 
 
 
