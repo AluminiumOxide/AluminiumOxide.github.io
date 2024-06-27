@@ -3,3 +3,6 @@
   - [win10_WLAN_transmit.md](/markdown_430/2307_web_LAN/win10_WLAN_transmit.md)
 - 2405
   - [conda_env_tensorflow.md](/markdown_430/2405/conda_env_tensorflow.md)
+- 2406_stm32
+  - [H750_build_1.md](/markdown_430/2406_stm32/H750_build_1.md)
+  - [H750_build_2.md](/markdown_430/2406_stm32/H750_build_2.md)
