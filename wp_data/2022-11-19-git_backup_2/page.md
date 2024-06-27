@@ -34,7 +34,7 @@ git branch
 
 ![](images/image.png)
 
-- 分支更新(第一步如果以前拉过可以忽略)
+- 分支更新(第一步如果以前拉过可以忽略) 一般这个别名是 origin
 
 ```
 git remote add <alias> https://github.com/AluminiumOxide/<repository>.git  
