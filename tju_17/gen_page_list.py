@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
 
     #step3 创建文件,写入
-    with open('cache_page_list.md', 'w') as file: 
+    with open('page_list.md', 'w') as file: 
         for key, value in gen_dict.items():
             file.write(value)
 

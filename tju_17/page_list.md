@@ -6,3 +6,4 @@
 - 2406_stm32
   - [H750_build_1.md](/markdown_430/2406_stm32/H750_build_1.md)
   - [H750_build_2.md](/markdown_430/2406_stm32/H750_build_2.md)
+  - [H750_build_3.md](/markdown_430/2406_stm32/H750_build_3.md)

@@ -59,8 +59,7 @@
 - others
 
     - [old_web_note](/wp_data/page_list?id=杂项笔记)
-    - [430_note](/markdown_430/page_list?id=杂项笔记)
-
+    - [tju_note](/tju_17/page_list?id=杂项笔记)
 
 
 
