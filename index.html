@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>水铝英石的书柜</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="//unpkg.com/mermaid/dist/mermaid.min.css" />
+
 </head>
+
 <body>
   <div id="app"></div>
+
+  <script type="text/javascript" src="//unpkg.com/mermaid/dist/mermaid.min.js"></script>
   <script>
     window.$docsify = {
       name: 'allophane',
@@ -22,15 +29,51 @@
       beian: {
         ICP: "辽ICP备2020013719号",
         NISMSP: {
-            number: "21080402111285",
-            url: "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=21080402111285",
-            id: "辽公网安备 21080402111285号"
+          number: "21080402111285",
+          url: "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=21080402111285",
+          id: "辽公网安备 21080402111285号"
         },
-    },
+      },
+      plugins: [
+        function (hook, vm) {
+          hook.ready(function () { 
+            mermaid.initialize({ startOnLoad: false });
+          });
+          hook.doneEach(function () { 
+            mermaid.init(undefined, '.mermaid');
+          });
+        }
+      ],
+      markdown: {
+        renderer: {
+          code: function (code, lang) {
+            var html = ''; 
+            if (code.match(/^sequenceDiagram/) || code.match(/^graph/) || code.match(/^gantt/)) {
+              html = '<div class="mermaid">' + code + '</div>';   
+            }
+            var hl = Prism.highlight(code, Prism.languages[lang] || Prism.languages.markup);  
+            return html + '<pre v-pre data-lang="' + lang + '"><code class="lang-' + lang + '">' + hl + '</code></pre>'; 
+          }
+        }
+      }
+
     }
   </script>
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-beian@latest/dist/beian.min.js"></script>
+  <!-- 代码高亮 -->
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-mermaid.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c++.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+  <!-- 代码复制 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+
+
+
+
 </body>
+
 </html>
