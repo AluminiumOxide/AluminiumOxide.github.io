@@ -5,6 +5,9 @@ if __name__ == '__main__':
     gen_path = []  # 存储相对路径 :[[当前目录,时间目录,md文件名],...]
     gen_dict = {}   # 文件夹集合  :{时间目录:生成内容,...}
 
+    if os.path.exists('./page_list.md'):
+        os.remove('./page_list.md')  # 删除文件
+
     #step1遍历本目录 和 本目录下的目录,并遍历下一层目录的md文件
     current_dir = os.getcwd()
     base_dir = os.path.basename(current_dir)  # 本目录名称

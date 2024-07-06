@@ -1,4 +1,5 @@
 - 2307_web_LAN
+  - [docsify_add_mermaid.md](/tju_17/2307_web_LAN/docsify_add_mermaid.md)
   - [win10_left_navigate_bar.md](/tju_17/2307_web_LAN/win10_left_navigate_bar.md)
   - [win10_WLAN_transmit.md](/tju_17/2307_web_LAN/win10_WLAN_transmit.md)
 - 2405_python
@@ -8,3 +9,6 @@
   - [H750_build_2.md](/tju_17/2406_stm32/H750_build_2.md)
   - [H750_build_3.md](/tju_17/2406_stm32/H750_build_3.md)
   - [H750_build_4.md](/tju_17/2406_stm32/H750_build_4.md)
+  - [H750_build_5.md](/tju_17/2406_stm32/H750_build_5.md)
+  - [H750_build_6.md](/tju_17/2406_stm32/H750_build_6.md)
+  - [H750_mix_1.md](/tju_17/2406_stm32/H750_mix_1.md)

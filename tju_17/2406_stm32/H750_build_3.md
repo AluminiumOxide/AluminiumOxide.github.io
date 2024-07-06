@@ -1,6 +1,6 @@
 虽然但是目前的配置下，确实可以正常使用，但是为了使用，在此基础上再配置一些外设
 
-## 4 添加FATFS
+## 3 添加FATFS
 
 本来这个应该不能算作一个单独的章节的，但是由于这个750加了FreeRTOS之后太爱它的卡芙卡了，就单独出来一个独立的章节来说(误)
 
@@ -24,7 +24,7 @@
 >
 > [STM32 和 FatFs 的硬故障](https://pcbartists.com/firmware/stm32-firmware/hard-fault-stm32-fatfs-solutions/?desktop_view=show)
 
-### 4.1 freeRTOS修改
+###  3.1 freeRTOS修改
 
 （再提一遍）由于笔者操作习惯，以及面向历史遗留的屎山代码编程，个人倾向于换成**CMSIS_v1**的版本
 
@@ -39,7 +39,7 @@
 
 后文默认使用CMSIS_v1的函数
 
-### 4.2 SDMMC配置
+### 3.2 SDMMC配置
 
 先选4bit的模式
 
@@ -47,7 +47,7 @@
 
 捕获模式、节能模式、硬件流控制 和 外部收发器都忽略，默认给什么就是什么
 
-#### 4.2.1 SDMMC clock divide factor 分频系数
+####  3.2.1 SDMMC clock divide factor 分频系数
 
 1. 点开SDMMC看时钟树的排布，比如我这里SDMMC是锁相环1的DIVQ控制
 
@@ -58,7 +58,7 @@
 > 当然，实际上这个上限也是个软上限，10速卡说的是最少10MB而不是卡的最高速度
 > 不过按照反客的例程，由于QSPI外部flash加载的缘故，建议分频系数尽量设置高一些（速度慢一些）（以及我没有测试进一步降低分频系数会不会使得Dcache正常工作，这部分内容之后再测）
 
-#### 4.2.2 中断配置
+#### 3.2.2 中断配置
 
 使能SDMMC1全局中断，用于输出**sdmmc_dataend_trg**
 
@@ -66,7 +66,7 @@
 
 ![image-20240426160109677](H750_build_3/image-20240426160109677.png)
 
-#### 4.2.3 GPIO配置
+#### 3.2.3 GPIO配置
 
 GPIO按照自己的需求配置，我的板子就按照默认的来，引脚不用变动
 
@@ -76,11 +76,11 @@ GPIO按照自己的需求配置，我的板子就按照默认的来，引脚不�
 
 因为对于H7来说，这玩意独立在**MDMA(Memory-to-Memory DMA)**中！！！
 
-### 4.3 MDMA配置
+### 3.3 MDMA配置
 
 MDMA相当于内存之间的直接访问，和DMA相比，不涉及外设
 
-#### 4.3.1 SDMMC data end request
+#### 3.3.1 SDMMC data end request
 
 先添加请求，然后在MDMA请求中添加SDMMC1 data end数据传输结束事件
 
@@ -98,7 +98,7 @@ MDMA相当于内存之间的直接访问，和DMA相比，不涉及外设
 
 ![image-20240627215740521](H750_build_3/image-20240627215740521.png)
 
-#### 4.3.2 中断配置
+#### 3.3.2 中断配置
 
 配置好了进NVIC扔给FreeRTOS的中断处理（最右面那列打勾，自动会把优先级压到freertos管理的中断控制区间(我这里是5-15，好吧，默认也是5-15)之内）
 
@@ -109,7 +109,7 @@ MDMA相当于内存之间的直接访问，和DMA相比，不涉及外设
 同时还需要注意一下freertos的全局中断优先级，在sys里选择（我使用的是TIM17，也就是**Time base TIM17 globa interrupt**的优先级一定要比FreeRTOS管理的5-15优先级高）
 ![image-20240627221032975](H750_build_3/image-20240627221032975.png)
 
-### 4.4 FatFS配置
+### 3.4 FatFS配置
 
 再次建议FreeRTOS使用CMSIS_v1(因为FatFS中也会检测CMSIS版本，CMSIS_v2我之前遇到一堆问题)
 
@@ -123,7 +123,7 @@ MDMA相当于内存之间的直接访问，和DMA相比，不涉及外设
 
 ![image-20240627224257779](H750_build_3/image-20240627224257779.png)
 
-##### 4.4.1 Set Defines
+##### 3.4.1 Set Defines
 
 ![image-20240426220950668](H750_build_3/image-20240426220950668.png)
 
@@ -137,7 +137,7 @@ MDMA相当于内存之间的直接访问，和DMA相比，不涉及外设
 | MAX_SS (Maximum Sector Size)           | 疑似需要调大                                     |
 | **FS_REENTRANT (Re-Entrancy)**         | **Enable  # 开了freertos必须把这玩意打开**       |
 
-##### 4.4.2 advance setting
+##### 3.4.2 advance setting
 
 这个选项卡中的选项均没用，因为：**ᕕ(◠ڼ◠)ᕗ**
 
@@ -147,7 +147,7 @@ MDMA相当于内存之间的直接访问，和DMA相比，不涉及外设
 
 ![image-20240426221020071](H750_build_3/image-20240426221020071.png)
 
-##### 4.4.3 Platform setting
+##### 3.4.3 Platform setting
 
 这个使能口其实选不选都可以，sd卡插入引脚检测，如果想配置，那就选一个引脚GPIO Input，然后绑定
 
@@ -159,7 +159,7 @@ MDMA相当于内存之间的直接访问，和DMA相比，不涉及外设
 
 ![image-20240426221144402](H750_build_3/image-20240426221144402.png)
 
-#### 4.4.4 中断设置
+#### 3.4.4 中断设置
 
 中断这里也是离谱，如果你不配置MDMA，这个选项根本不显示！草！！！如果H7不配置之前的MDMA，cubeMX也不会提示你需要配置MDMA，然后f_mount就一直失败！
 
@@ -167,11 +167,11 @@ MDMA相当于内存之间的直接访问，和DMA相比，不涉及外设
 
 配置完generate code然后再touchGFX generate code
 
-### 4.5 代码修改
+### 3.5 代码修改
 
 把参数整理好之后在main添加代码，我这里写道alu_file.c和alu_file.h中了，反正之后都传gayhub，这里只列出主要代码，
 
-#### 4.5.1 必要修改
+#### 3.5.1 必要修改
 
 sd_diskio.c
 
@@ -186,7 +186,7 @@ sd_diskio.c
 
 ![image-20240627231453335](H750_build_3/image-20240627231453335.png)
 
-#### 4.5.2 非必要修改（可忽略）
+#### 3.5.2 非必要修改（可忽略）
 
 上面配完之后，f_xxx的函数就可以直接用了，至于后面这些应用层废料，反正网上一搜一堆
 

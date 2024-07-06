@@ -1,14 +1,14 @@
-## 5 其他外设部分
+## 4 其他外设配置
 
 这部分就不细说了，反正这类基础屎山网上一抓一大把，我写也是复制粘贴，你说的对，但是后面忘了
 
-### 5.1添加USART
+### 4.1配置USART
 
 用于串口调试
 
 注意：用了TouchGFX之后，串口可以开！但是printf千万别乱用！别用别用别用！会把FatFS卡住
 
-#### 5.1.1 cubeMX配置
+#### 4.1.1 cubeMX配置
 
 点开异步通信，没什么重要的波特率115200，8数据位，1校验位
 
@@ -22,7 +22,7 @@
 
 
 
-#### 5.1.2 keil配置
+#### 4.1.2 keil配置
 
 为了不勾选MicroLIB还能正常使用（因为touchGFX是C++的你无法使用别的）
 
@@ -94,11 +94,11 @@ printf("STM32H750串口demo\r\n");
 
 
 
-### 5.2 添加SPI
+### 4.2 配置SPI
 
 用于MAX6675通信
 
-#### 5.2.1 CubeMX配置
+#### 4\.2.1 CubeMX配置
 
 这里就不用细说了,**全双工**,**8bit**的**MSB**,**128倍预分频值**(垃圾6675速度没法太快),其他的不用太管
 
@@ -116,7 +116,7 @@ GPIO口按照自身引脚需要设置，我这个就按默认来
 
 ![image-20240628093043555](H750_build_4/image-20240628093043555.png)
 
-#### 5.2.2 keil配置
+#### 4.2.2 keil配置
 
 在keil项目中添加使用MAX6675的获得温度数据的方法，
 
@@ -182,19 +182,19 @@ void AluMain(void *argument){
 }
 ```
 
-### 5.3 添加GPIO
+### 4.3 配置GPIO
 
 忙里偷闲，懒的说了，按键的配上就可以用
 
 ![image-20240628092119962](H750_build_4/image-20240628092119962.png)
 
-### 5.4 添加DAC
+### 4.4 配置DAC
 
 参考：[DAC接口使用（输出正弦波）](https://blog.csdn.net/qq_36347513/article/details/114940991)、[同相比例放大器 - 嘉立创EDA开源硬件平台、](https://oshwhub.com/Hatano/tong-xiang-bi-li-fang-tai-qi)、[LM741 参数+LM741 工作原理讲解](https://zhuanlan.zhihu.com/p/576978216)
 
 用于输出自定义电流（之前计划和激光器的通信方式，在目前的项目中已弃置，但是配都配了，还是说一下吧）
 
-#### 5.4.1 cubeMX配置
+#### 4.4.1 cubeMX配置
 
 开启DAC
 
@@ -206,7 +206,7 @@ void AluMain(void *argument){
 
 ![image-20240628093648361](H750_build_4/image-20240628093648361.png)
 
-#### 5.4.2 keil配置
+#### 4.4.2 keil配置
 
 生成代码之后在main.c中添加DAC相关内容
 
@@ -234,3 +234,81 @@ void AluSubProgress(void *argument)
 设置0-4095 对应0-3.3V, 输出电压=3.3*(输入/4096)
 
 后续使用LM741将0-3.3V,转0-5V，但是由于反正这个方法已经弃置了，那以后再补吧
+
+### 4.5 配置PWM
+
+之后使用PWM截波的方式代替DAC输出，如果要使用这玩意
+
+#### 4.5.1 cubeMX配置
+
+直接点开TIM选择一个Channel（哪个TIM和channel都行，只要没被占用），设置成PWM Generation模式
+
+![image-20240630155854075](H750_build_4/image-20240630155854075.png)
+
+这里需要改的主要是以下几个配置，
+
+| Counter Settings             |            |                                                |
+| ---------------------------- | ---------- | ---------------------------------------------- |
+| Prescaler                    | 240-1      | 预分频值(0~65535)                              |
+| Counter Mode                 | Up         | 计数模式：加计数(0加到重装填值)                |
+| Counter Period               | 1000-1     | 重装填值(0~65535)                              |
+| Repetition Counter           | 0          | 中断重复计数（与参考手册的图和计数模式一起看） |
+| **PWM Generation Channel X** |            |                                                |
+| Mode                         | PWM mode 1 | 后面细说                                       |
+| Pulse                        | 0          | 初装填值(0~65535)                              |
+
+参考[H750数据手册（规格书）](https://www.st.com.cn/resource/en/datasheet/stm32h750ib.pdf)的 架构图（STM32H742xI/G block diagram）和cubeMX的时钟树
+
+![image-20240630164004097](H750_build_4/image-20240630164004097.png)
+
+可以得到TIM1在APB2上，并且APB2的定时器晶振为240MHz=240×10^6^Hz
+
+如果要一个一秒钟输出1000次的PWM波，那每个时序下共有 240×10^6^/1000=240×10^3^个时钟周期
+
+如果后续想输入0~999的精度去控制PWM输出的占空比，那么：
+
+- 重装填值 = 1000 - 1
+- 预分频值 = 240×10^3^/1000 - 1 = 240 - 1
+
+然后参考[STM32H7参考手册](https://www.stmcu.com.cn/Designresource/detail/document/699642)的高级定时器
+
+<img src="H750_build_4/image-20240630165401356.png" alt="image-20240630165401356" style="zoom:50%;" />
+
+- Counter Mode相当于选用哪种计数的模式，UP即是中间这类的加计数
+- Repetition Counter相当于多少次计数产生一次中断，由于我们打算直接输出，所以这里按默认来
+
+参考[STM32H7参考手册](https://www.stmcu.com.cn/Designresource/detail/document/699642)38.3.11 PWM mode 对于单边装载模式的描述
+
+![image-20240630171321237](H750_build_4/image-20240630171321237.png)
+
+可以理解为：在使用单边计数模式（counter mode为up或down）时，
+
+- PWM mode 1：计数值低于初装填值时为1，计数值高于初装填值时为0
+- PWM mode 2：计数值低于初装填值时为0，计数值高于初装填值时为1
+
+因此初装填值相当于判断占空比的比例为多少，PWM mode 1且初始化为0，即：默认输出全是低电平
+
+掰扯完了，咱们继续
+
+点开GPIO setting选择一个引脚输出，这里选的是PA11，并且命名为：TIM1_PWM
+
+![image-20240630172046065](H750_build_4/image-20240630172046065.png)
+
+#### 4.5.2 keil配置
+
+然后在中：
+
+更改__HAL_TIM_SET_COMPARE的第3个参数，即可更改初装填值，从而改变占空比
+
+比如speed=199那就是占空比为20%，speed=799那就是占空比为80%
+
+```C
+/* task... */
+HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, speed);
+/* other code ... */
+HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_4);
+```
+
+如果你闲的没事干，把电机或者LED接上，还可以水个呼吸灯(后面忘了)
+
