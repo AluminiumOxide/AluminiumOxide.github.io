@@ -1,9 +1,11 @@
 - 2307_web_LAN
+  - [aria2-install.md](/tju_17/2307_web_LAN/aria2-install.md)
   - [docsify_add_mermaid.md](/tju_17/2307_web_LAN/docsify_add_mermaid.md)
   - [win10_left_navigate_bar.md](/tju_17/2307_web_LAN/win10_left_navigate_bar.md)
   - [win10_WLAN_transmit.md](/tju_17/2307_web_LAN/win10_WLAN_transmit.md)
 - 2405_python
   - [conda_env_tensorflow.md](/tju_17/2405_python/conda_env_tensorflow.md)
+  - [conda_env_triton.md](/tju_17/2405_python/conda_env_triton.md)
 - 2406_stm32
   - [H750_build_1.md](/tju_17/2406_stm32/H750_build_1.md)
   - [H750_build_2.md](/tju_17/2406_stm32/H750_build_2.md)
